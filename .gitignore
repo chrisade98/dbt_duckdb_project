@@ -2,3 +2,9 @@ venv/
 target/
 logs/
 Git/
+# DuckDB database files
+*.duckdb
+*.db
+
+# Python virtual environment (just in case)
+.venv/
