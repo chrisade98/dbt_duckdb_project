@@ -1,4 +1,4 @@
 venv/
-*.duckdb
-duckdb.exe
-.vscode/
+target/
+logs/
+Git/
