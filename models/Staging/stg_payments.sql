@@ -5,4 +5,4 @@ select
         status,
         created,
         _batched_at
-    from {{ ref('stripe_payment') }}
+    from {{ source('raw_files', 'stripe_payment') }}

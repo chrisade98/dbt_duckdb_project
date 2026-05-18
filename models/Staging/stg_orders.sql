@@ -4,4 +4,4 @@ select
         order_date,
         status,
         _etl_loaded_at
-    from {{ ref('orders') }}
+    from  {{ source('raw_files', 'orders') }}

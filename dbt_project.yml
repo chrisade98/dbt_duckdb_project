@@ -33,8 +33,7 @@ models:
   my_business_analytics:
     # Config indicated by + and applies to all files under models/example/
     Staging:
-       +materialized: view
-      
+      +materialized: view
     Marts:
-       +materialized: table
+      +materialized: table
        

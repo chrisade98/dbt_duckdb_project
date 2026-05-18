@@ -1,5 +1,14 @@
 version: 2
 
+sources:
+  - name: raw_files
+    schema: main
+    meta:
+      external_location: "./raw_data/{name}.csv"
+    tables:
+      - name: shop_customers
+      - name: orders
+      - name: stripe_payment
 models:
   - name: dim_customers
     columns:
