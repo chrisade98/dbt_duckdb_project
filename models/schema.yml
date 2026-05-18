@@ -8,7 +8,13 @@ sources:
     tables:
       - name: shop_customers
       - name: orders
+        config:
+          freshness:
+            warn_after: {count: 100, period: day}
+            error_after: {count: 250, period: day}
+          loaded_at_field: _etl_loaded_at
       - name: stripe_payment
+
 models:
   - name: dim_customers
     columns:
