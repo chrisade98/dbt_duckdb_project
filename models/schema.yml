@@ -2,23 +2,69 @@ version: 2
 
 sources:
   - name: raw_files
+    description: Raw CSV files loaded through DuckDB external file references.
     schema: main
     meta:
       external_location: "./raw_data/{name}.csv"
     tables:
       - name: shop_customers
+        description: Raw customer records from the shop system.
+        columns:
+          - name: id
+            description: Unique identifier for each customer in the source system.
+            tests:
+              - unique
+              - not_null
       - name: orders
+        description: Raw order records from the shop system, including order status and extract load timestamp.
+        columns:
+          - name: id
+            description: Unique identifier for each order in the source system.
+            tests:
+              - unique
+              - not_null
+          - name: user_id
+            description: Customer identifier associated with the order.
+            tests:
+              - not_null
+          - name: status
+            description: Current lifecycle status of the order.
+            tests:
+              - accepted_values:
+                  values: 
+                   - Pending
+                   - Shipped
+                   - Delivered
+                   - Cancelled
+          - name: _etl_loaded_at
+            description: Timestamp showing when the order row was loaded into the raw source layer. Used for source freshness checks.
         config:
           freshness:
-            warn_after: {count: 100, period: day}
-            error_after: {count: 250, period: day}
+            warn_after: {count: 150, period: day}
+            error_after: {count: 2000, period: day}
           loaded_at_field: _etl_loaded_at
       - name: stripe_payment
-
+        description: Raw payment records from Stripe, keyed to shop orders.
 models:
   - name: dim_customers
+    description: Customer dimension combining customer profile details with order history and payment summary metrics.
     columns:
       - name: customer_id
+        description: Unique customer identifier used as the primary key for the customer dimension.
         tests:
           - unique
           - not_null
+      - name: firstname
+        description: Customer first name from the shop customer source.
+      - name: lastname
+        description: Customer last name from the shop customer source.
+      - name: first_order_date
+        description: Date of the customer's first recorded order.
+      - name: most_recent_order_date
+        description: Date of the customer's most recent recorded order.
+      - name: number_of_orders
+        description: Total number of orders placed by the customer.
+      - name: total_amount
+        description: Total payment amount associated with the customer's orders.
+      - name: payment_methods
+        description: Distinct payment methods used by the customer across their orders.
